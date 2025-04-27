@@ -1,25 +1,27 @@
 {
-  "name": "daily-points-collector",
+  "name": "xlmm-auto-bot",
   "version": "1.0.0",
-  "description": "A script to collect daily points by checking in with tokens from token.txt",
+  "description": "A bot to collect daily points from xLMM API with a custom banner",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "collect-points": "./index.js"
+    "xlmm-bot": "./index.js"
   },
   "keywords": [
     "automation",
     "crypto",
     "daily-points",
-    "check-in"
+    "check-in",
+    "bot"
   ],
   "author": "BTC Trader (ADB NODE)",
   "license": "MIT",
   "dependencies": {
-    "axios": "^1.7.7"
+    "axios": "^1.7.7",
+    "chalk": "^4.1.2"
   },
   "engines": {
     "node": ">=14.0.0"
