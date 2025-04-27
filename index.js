@@ -9,8 +9,19 @@ function displayBanner() {
   const bannerWidth = 54;
   const line = '-'.repeat(bannerWidth);
   console.log(chalk.cyan(line));
-  console.log(chalk.cyan('xLMM Auto Bot - ADB NODE (author - BTC Trader)'));
+  console.log(chalk.cyan('xLMM Auto Bot - ADB NODE'));
   console.log(chalk.cyan(line));
+}
+
+// Function to format date and time (YYYY-MM-DD HH:MM:SS)
+function formatDateTime(date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 // Function to decode the JWT payload (without verifying the signature)
@@ -123,5 +134,32 @@ async function collectDailyPoints() {
   }
 }
 
-// Run the script
-collectDailyPoints();
+// Function to start the 24-hour countdown timer
+function startCountdown() {
+  const durationMs = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+  const endTime = Date.now() + durationMs;
+  const nextExecutionDate = new Date(endTime);
+
+  const interval = setInterval(() => {
+    const remainingMs = endTime - Date.now();
+    if (remainingMs <= 0) {
+      clearInterval(interval);
+      console.log(chalk.green('⏰ Countdown finished! Starting next daily points collection...'));
+      collectDailyPoints().then(() => startCountdown()); // Run again after completion
+    } else {
+      const hours = Math.floor(remainingMs / (1000 * 60 * 60));
+      const minutes = Math.floor((remainingMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remainingMs % (1000 * 60)) / 1000);
+      process.stdout.write(
+        `\r${chalk.cyan('⏰ Next execution at: ')}${chalk.cyan.bold(
+          formatDateTime(nextExecutionDate)
+        )} ${chalk.cyan('(in ')}${chalk.cyan.bold(
+          `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+        )}${chalk.cyan(')')}`
+      );
+    }
+  }, 1000);
+}
+
+// Run the script and start the countdown
+collectDailyPoints().then(() => startCountdown());
