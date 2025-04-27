@@ -9,7 +9,7 @@ function displayBanner() {
   const bannerWidth = 54;
   const line = '-'.repeat(bannerWidth);
   console.log(chalk.cyan(line));
-  console.log(chalk.cyan('xLMM Auto Bot - ADB NODE'));
+  console.log(chalk.cyan('xLMM Auto Bot - ADB NODE (author - BTC Trader)'));
   console.log(chalk.cyan(line));
 }
 
