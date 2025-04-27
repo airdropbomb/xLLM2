@@ -20,7 +20,7 @@ function decodeToken(token) {
     const decoded = Buffer.from(payload, 'base64').toString('utf8');
     return JSON.parse(decoded);
   } catch (error) {
-    console.error('Error decoding token:', error.message);
+    console.error(chalk.red(`Error decoding token: ${error.message}`));
     return {};
   }
 }
@@ -34,7 +34,7 @@ function shortenToken(token) {
 async function getTokens() {
   try {
     const tokenFilePath = path.join(__dirname, 'token.txt');
-    console.log('📖 Reading tokens from token.txt...');
+    console.log(chalk.yellow('📖 Reading tokens from token.txt...'));
     const data = await fs.readFile(tokenFilePath, 'utf8');
     
     // Parse each line in the format "accountName:token"
@@ -42,7 +42,7 @@ async function getTokens() {
     const accounts = lines.map((line, index) => {
       const [accountName, token] = line.split(':');
       if (!accountName || !token) {
-        console.warn(`⚠️ Invalid format at line ${index + 1}: ${shortenToken(line)}`);
+        console.warn(chalk.yellow(`⚠️ Invalid format at line ${index + 1}: ${shortenToken(line)}`));
         return {
           account: `Account ${index + 1}`,
           token: line
@@ -55,17 +55,17 @@ async function getTokens() {
       };
     });
     
-    console.log('✅ Parsed accounts:', accounts.map(acc => acc.account).join(', '));
+    console.log(chalk.green(`✅ Parsed accounts: ${accounts.map(acc => acc.account).join(', ')}`));
     return accounts;
   } catch (error) {
-    console.error('❌ Error reading token.txt:', error.message);
+    console.error(chalk.red(`❌ Error reading token.txt: ${error.message}`));
     throw error;
   }
 }
 
 async function collectDailyPointsForAccount(account, token) {
   try {
-    console.log(`🔄 Processing ${account} (Token: ${shortenToken(token)})`);
+    console.log(chalk.blue(`🔄 Processing ${account} (Token: ${shortenToken(token)})`));
     const cleanedToken = token.replace(/[^A-Za-z0-9-._~+/=]/g, '');
     if (!cleanedToken) {
       throw new Error(`Token for ${account} is empty after cleaning`);
@@ -79,21 +79,21 @@ async function collectDailyPointsForAccount(account, token) {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.6787.75 Safari/537.36',
     };
 
-    console.log(`📡 Sending check-in request for ${account}...`);
+    console.log(chalk.cyan(`📡 Sending check-in request for ${account}...`));
     const response = await axios.post(apiUrl, {}, { headers });
 
     if (response.data.error && (response.data.error.code === 'checkInAlready' || response.data.error.code === 'error.checkInAlready')) {
-      console.log(`❌ ${account}: Check in already`);
+      console.log(chalk.red(`❌ ${account}: Check in already`));
     } else if (!response.data.data) {
-      console.warn(`⚠️ ${account}: Check-in failed. Response:`, response.data);
+      console.warn(chalk.yellow(`⚠️ ${account}: Check-in failed. Response:`, response.data));
     } else {
-      console.log(`🎉 ${account}: Points collected successfully! Streak: ${response.data.data.currentStreak}`);
+      console.log(chalk.green.bold(`🎉 ${account}: Points collected successfully! Streak: ${response.data.data.currentStreak}`));
     }
   } catch (error) {
     if (error.response && error.response.data.error && (error.response.data.error.code === 'checkInAlready' || error.response.data.error.code === 'error.checkInAlready')) {
-      console.log(`❌ ${account}: Check in already`);
+      console.log(chalk.red(`❌ ${account}: Check in already`));
     } else {
-      console.error(`❌ ${account}: Error collecting points:`, error.response ? error.response.data : error.message);
+      console.error(chalk.red(`❌ ${account}: Error collecting points:`, error.response ? error.response.data : error.message));
     }
   }
 }
@@ -105,21 +105,21 @@ async function collectDailyPoints() {
     
     const accounts = await getTokens();
     if (accounts.length === 0) {
-      console.error('❌ No tokens found in token.txt');
+      console.error(chalk.red('❌ No tokens found in token.txt'));
       return;
     }
     for (let i = 0; i < accounts.length; i++) {
       const { account, token } = accounts[i];
       await collectDailyPointsForAccount(account, token);
       if (i < accounts.length - 1) {
-        console.log(`➡️ Next account: ${accounts[i + 1].account}`);
+        console.log(chalk.yellowBright(`➡️ Next account: ${accounts[i + 1].account}`));
       } else {
-        console.log('🏁 All accounts processed.');
+        console.log(chalk.green('🏁 All accounts processed.'));
       }
-      console.log('─'.repeat(40));
+      console.log(chalk.gray('─'.repeat(40)));
     }
   } catch (error) {
-    console.error('❌ Failed to process accounts:', error.message);
+    console.error(chalk.red(`❌ Failed to process accounts: ${error.message}`));
   }
 }
 
