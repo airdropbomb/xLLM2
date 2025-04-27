@@ -19,6 +19,8 @@ npm install
 account1:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 account2:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
+![Screenshot_113](https://github.com/user-attachments/assets/a14c1fd0-6079-454c-a5c7-069a98598a3b)
+
 
 Run the bot with:
 
