@@ -2,6 +2,16 @@
 const axios = require('axios');
 const fs = require('fs').promises;
 const path = require('path');
+const chalk = require('chalk');
+
+// Display Banner
+function displayBanner() {
+  const bannerWidth = 54;
+  const line = '-'.repeat(bannerWidth);
+  console.log(chalk.cyan(line));
+  console.log(chalk.cyan('xLMM Auto Bot - ADB NODE'));
+  console.log(chalk.cyan(line));
+}
 
 // Function to decode the JWT payload (without verifying the signature)
 function decodeToken(token) {
@@ -90,6 +100,9 @@ async function collectDailyPointsForAccount(account, token) {
 
 async function collectDailyPoints() {
   try {
+    // Display banner at the start
+    displayBanner();
+    
     const accounts = await getTokens();
     if (accounts.length === 0) {
       console.error('❌ No tokens found in token.txt');
