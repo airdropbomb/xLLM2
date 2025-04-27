@@ -1,7 +1,7 @@
 {
   "name": "xlmm-auto-bot",
   "version": "1.0.0",
-  "description": "A bot to collect daily points from xLMM API with a custom banner",
+  "description": "A bot to collect daily points from xLMM API with a custom banner and colored output",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
