@@ -6,7 +6,7 @@ An automated bot for Daily Claim.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/airdropbomb/xLMM2.git && cd xLMM2
+git clone https://github.com/airdropbomb/xLLM2.git && cd xLLM2
 ```
 
 2. Install dependencies:
