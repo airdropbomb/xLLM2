@@ -1,0 +1,27 @@
+{
+  "name": "daily-points-collector",
+  "version": "1.0.0",
+  "description": "A script to collect daily points by checking in with tokens from token.txt",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "collect-points": "./index.js"
+  },
+  "keywords": [
+    "automation",
+    "crypto",
+    "daily-points",
+    "check-in"
+  ],
+  "author": "BTC Trader (ADB NODE)",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.7"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
